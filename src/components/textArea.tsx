@@ -24,7 +24,7 @@ const TextArea: React.FC<TextAreaProps> = ({
   return (
     <>
       <textarea
-        className="w-full h-full p-10 bg-primary text-white rounded-lg"
+        className="content w-full h-full p-10 bg-primary text-white rounded-lg"
         placeholder="Type...."
         value={editedContent}
         style={{ ...textareaStyle, ...textareaFocusStyle }}
