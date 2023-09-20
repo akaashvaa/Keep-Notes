@@ -57,6 +57,7 @@ export default function LeftPart() {
         }
         return listNote
       })
+      console.log(updatedTodoList)
       dispatch(setTodoList(updatedTodoList))
     }
   }
@@ -75,7 +76,7 @@ export default function LeftPart() {
     dispatch(selectNote(newNote))
   }
 
-  const handleClick = (note: Note) => {
+  const handleNoteClick = (note: Note) => {
     switchSave()
     dispatch(selectNote(note))
   }
@@ -105,11 +106,11 @@ export default function LeftPart() {
         >
           <button
             className="w-3/4 bg-secondary rounded-md h-12 "
-            onClick={() => handleClick(note)}
+            onClick={() => handleNoteClick(note)}
           >
-            {note.title.length < 10
+            {note.title?.length < 10
               ? note.title
-              : note.title.slice(0, 10) + '...'}
+              : note.title?.slice(0, 10) + '...'}
           </button>
           <button
             onClick={() => deleteChanges(note)}
