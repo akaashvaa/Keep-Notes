@@ -1,12 +1,16 @@
 import { createSlice } from '@reduxjs/toolkit'
-import { notes } from '../constants/index'
+
+type Note = {
+  id: string
+  title: string
+  content: string
+}
+
+// Initialize 'notes' as an empty array of type 'Note'
+const notes: Note[] = []
 
 interface NoteState {
-  todoList: Array<{
-    id: number
-    title: string
-    content: string
-  }>
+  todoList: Note[]
 }
 
 // Assuming 'notes' is an array of objects with 'id', 'title', and 'content' properties
