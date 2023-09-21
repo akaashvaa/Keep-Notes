@@ -27,6 +27,11 @@ export default function LeftPart() {
   const todoList = useSelector((state: State2) => state.todoList.todoList)
   // console.log(todoList)
 
+  const dispatchAction = (newTodoList: Note[], selectedNote: Note) => {
+    dispatch(setTodoList(newTodoList))
+    dispatch(selectNote(selectedNote))
+  }
+
   const switchSave = () => {
     const titleElements = document.querySelectorAll(
       '.title'
@@ -35,20 +40,19 @@ export default function LeftPart() {
       '.content'
     ) as NodeListOf<HTMLInputElement>
 
-    // Assuming there's only one element with the class "title" and "content,"
-    // you can access their values like this:
+    // we can grab the value of the input by accessing the first element in the
     const titleValue = titleElements[0].value
     const contentValue = contentElements[0].value
 
-    console.log('Title Value:', titleValue)
-    console.log('Content Value:', contentValue)
-
+    // console.log('Title Value:', titleValue)
+    // console.log('Content Value:', contentValue)
+    // if there is a selected note then we need to update the note
     if (selectedNote !== null) {
       const updatedTodoList = todoList.map((listNote) => {
         if (listNote.id === selectedNote.id) {
           // console.log(selectedNote)
           // console.log(listNote)
-          console.log('hit')
+          // console.log('hit')
           return {
             ...listNote,
             title: titleValue,
@@ -57,28 +61,43 @@ export default function LeftPart() {
         }
         return listNote
       })
-      console.log(updatedTodoList)
-      dispatch(setTodoList(updatedTodoList))
+      // console.log(updatedTodoList)
+      // dispatch(setTodoList(updatedTodoList))
+      return updatedTodoList
+    } else if (titleValue !== '' || contentValue !== '') {
+      // what if there is no selected note and the user is typing in the input fields and created new note then also we need to save the note
+      const newNote = {
+        id: uuidv4(),
+        title: titleValue,
+        content: contentValue,
+      }
+      return [newNote, ...todoList]
     }
   }
 
   const handleCreateNewNote = async () => {
+    const newTodoList = switchSave()
     // created a new note id
-    switchSave()
     const newNote = {
       id: uuidv4(),
       title: '',
       content: '',
     }
-    const updatedTodoList = [newNote, ...todoList]
+    let updatedTodoList = []
+    if (newTodoList !== undefined) {
+      updatedTodoList = [newNote, ...newTodoList]
+    } else {
+      updatedTodoList = [newNote, ...todoList]
+    }
+
     // Dispatch an action to add the new note to the todoList
-    dispatch(setTodoList(updatedTodoList))
-    dispatch(selectNote(newNote))
+    dispatchAction(updatedTodoList, newNote)
   }
 
   const handleNoteClick = (note: Note) => {
-    switchSave()
-    dispatch(selectNote(note))
+    const newTodoList = switchSave()
+
+    dispatchAction(newTodoList ?? [], note)
   }
 
   const deleteChanges = (note: Note) => {
